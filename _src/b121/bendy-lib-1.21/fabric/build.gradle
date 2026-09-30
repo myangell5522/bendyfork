@@ -1,0 +1,115 @@
+plugins {
+    id "com.github.johnrengelman.shadow"
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+repositories {
+    maven { url "https://maven.terraformersmc.com/releases/" }
+    maven { url "https://maven.kosmx.dev/" }
+}
+
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+    modLocalRuntime "com.terraformersmc:modmenu:9.0.0"
+    // modLocalRuntime "maven.modrinth:skinswapper:3.12"
+
+    //modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
+   // modLocalRuntime "dev.kosmx.player-anim:player-animation-lib-fabric:0.4.0-test1"
+    //modLocalRuntime "maven.modrinth:emotecraft:2.2.5-MC1.19.2-fabric"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier.set("dev-shadow")
+}
+
+remapJar {
+    injectAccessWidener = true
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier.set(null)
+}
+
+jar {
+    archiveClassifier.set("dev")
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        if (System.getenv("MAVEN_PASS") != null) {
+            maven {
+                url = 'https://maven.kosmx.dev/'
+                credentials {
+                    username = project.keys.maven_user
+                    password = project.keys.kosmx_maven
+                }
+            }
+        } else {
+            mavenLocal()
+        }
+
+
+        if(System.getenv("GITHUB_ACTOR") != null) {
+            maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/kosmx/bendy-lib"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}

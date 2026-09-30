@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "*"
+#issueTrackerURL = ""
+license = "CC-BY-4.0"
+
+[[mods]]
+modId = "bendylib"
+version = "${version}"
+displayURL = "https://github.com/KosmX/bendy-lib"
+displayName = "Bendy lib"
+authors = "KosmX"
+description = '''
+Bending model parts.
+NeoForge 1.21.1 fork of KosmX/bendy-lib with 3D Skin Layers compatibility.
+'''
+#logoFile = ""
+
+[[mixins]]
+config = "bendylib.mixins.json"
+
+[[dependencies.bendylib]]
+modId = "minecraft"
+type = "required"
+mandatory = true
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.bendylib]]
+modId = "skinlayers3d"
+type = "optional"
+mandatory = false
+versionRange = "[1.11,)"
+ordering = "AFTER"
+side = "CLIENT"

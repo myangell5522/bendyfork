@@ -1,0 +1,26 @@
+modLoader = "javafml"
+loaderVersion = "*"
+#issueTrackerURL = ""
+license = "CC-BY-4.0"
+
+[[mods]]
+modId = "bendylib"
+version = "${version}"
+displayURL = "https://github.com/KosmX/bendy-lib"
+displayName = "Bendy lib"
+authors = "KosmX"
+description = '''
+Bending model parts
+'''
+#logoFile = ""
+
+[[mixins]]
+config = "bendylib.mixins.json"
+
+[[dependencies.bendylib]]
+modId = "minecraft"
+type = "required"
+mandatory = true
+versionRange = "[1.21,)"
+ordering = "NONE"
+side = "CLIENT"

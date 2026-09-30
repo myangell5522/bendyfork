@@ -1,0 +1,52 @@
+architectury {
+    common("neoforge", "fabric")
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/bendylib.accesswidener")
+}
+
+dependencies {
+    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
+    // Do NOT use other classes from fabric loader
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+
+    // 3D Skin Layers API (tr7zw). Compile only: the mod is optional at runtime.
+    compileOnly files("${rootProject.projectDir}/libs/skinlayers3d-neoforge-1.11.3-mc1.21.1.jar")
+}
+
+publishing {
+    publications {
+        mavenCommon(MavenPublication) {
+            artifactId = rootProject.archives_base_name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        if (System.getenv("MAVEN_PASS") != null) {
+            maven {
+                url = 'https://maven.kosmx.dev/'
+                credentials {
+                    username = project.keys.maven_user
+                    password = project.keys.kosmx_maven
+                }
+            }
+        } else {
+            mavenLocal()
+        }
+
+
+        if(System.getenv("GITHUB_ACTOR") != null) {
+            maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/kosmx/bendy-lib"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
