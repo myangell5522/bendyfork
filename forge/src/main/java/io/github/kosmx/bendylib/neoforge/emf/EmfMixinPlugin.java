@@ -24,7 +24,13 @@ public class EmfMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         LoadingModList mods = LoadingModList.get();
-        return mods != null && mods.getModFileById("entity_model_features") != null;
+        if (mods == null || mods.getModFileById("entity_model_features") == null) {
+            return false;
+        }
+        if (mixinClassName.endsWith("BendRememberMixin")) {
+            return mods.getModFileById("playeranimator") != null;
+        }
+        return true;
     }
 
     @Override

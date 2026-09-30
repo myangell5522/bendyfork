@@ -6,7 +6,8 @@
   "plugin": "io.github.kosmx.bendylib.neoforge.emf.EmfMixinPlugin",
   "client": [
     "EMFPartBendMixin",
-    "EMFCubeCompileMixin"
+    "EMFCubeCompileMixin",
+    "BendRememberMixin"
   ],
   "injectors": {
     "defaultRequire": 1

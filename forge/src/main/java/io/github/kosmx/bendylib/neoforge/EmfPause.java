@@ -1,4 +1,4 @@
-package io.github.kosmx.bendylib.neoforge.emf;
+package io.github.kosmx.bendylib.neoforge;
 
 import dev.kosmx.playerAnim.impl.IAnimatedPlayer;
 import dev.kosmx.playerAnim.impl.animation.AnimationApplier;
@@ -9,6 +9,7 @@ import traben.entity_model_features.utils.EMFEntity;
 /**
  * Fresh Animations rewrites arm and leg rotations every frame.
  * While a Player Animator layer is playing, pause that script so the pose and the bend stay on the EMF mesh.
+ * This class stays outside the EMF mixin package: Mixin forbids loading those classes from the mod constructor.
  */
 public final class EmfPause {
     private EmfPause() {}

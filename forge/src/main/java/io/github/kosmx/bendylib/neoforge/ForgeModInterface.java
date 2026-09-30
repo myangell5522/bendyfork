@@ -1,7 +1,6 @@
 package io.github.kosmx.bendylib.neoforge;
 
 import io.github.kosmx.bendylib.compat.tr7zw.TDSkinCompat;
-import io.github.kosmx.bendylib.neoforge.emf.EmfPause;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
