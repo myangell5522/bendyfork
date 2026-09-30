@@ -1,10 +1,7 @@
 package io.github.kosmx.bendylib;
 
 import io.github.kosmx.bendylib.impl.BendableCuboid;
-import io.github.kosmx.bendylib.impl.IBendable;
-import io.github.kosmx.bendylib.impl.RememberingPos;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.core.Direction;
 
 import java.util.List;
 import java.util.Map;
@@ -41,11 +38,8 @@ public final class BendCopy {
         }
         String key = active.getA();
         if (!target.hasMutator(key)) {
-            target.registerMutator(key, data -> new BendableCuboid.Builder().setDirection(bendable.getBendDirection()).build(data,
-                    (sides, positions, minX, minY, minZ, maxX, maxY, maxZ, fixX, fixY, fixZ,
-                     direction, basePlane, otherPlane, fullSize) ->
-                            new CopiedBendableCuboid(sides, positions, minX, minY, minZ, maxX, maxY, maxZ, fixX, fixY, fixZ, direction,
-                                    bendable.getBasePlane().scaled(1f), bendable.getOtherSidePlane().scaled(1f), bendable.bendHeight())));
+            // Planes and height come from the target cube. Only the bend direction is taken from the source.
+            target.registerMutator(key, data -> new BendableCuboid.Builder().setDirection(bendable.getBendDirection()).build(data));
         }
         target.copyStateFrom(source);
     }
@@ -87,11 +81,5 @@ public final class BendCopy {
     private static boolean isBend(MutableCuboid mutable) {
         var active = mutable.getActiveMutator();
         return active != null && active.getB() instanceof BendableCuboid;
-    }
-
-    private static final class CopiedBendableCuboid extends BendableCuboid {
-        private CopiedBendableCuboid(BendableCuboid.Quad[] sides, RememberingPos[] positions, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, float fixX, float fixY, float fixZ, Direction direction, IBendable.Plane basePlane, IBendable.Plane otherPlane, float fullSize) {
-            super(sides, positions, minX, minY, minZ, maxX, maxY, maxZ, fixX, fixY, fixZ, direction, basePlane, otherPlane, fullSize);
-        }
     }
 }

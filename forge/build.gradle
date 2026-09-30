@@ -27,6 +27,8 @@ dependencies {
 
     // Entity Model Features API. Compile only: the mod is optional at runtime.
     compileOnly files("${rootProject.projectDir}/libs/entity_model_features-3.3.9-1.21-neoforge.jar")
+    compileOnly files("${rootProject.projectDir}/libs/player-animation-lib-forge-2.0.4+1.21.1.jar")
+    compileOnly files("${rootProject.projectDir}/libs/entity_texture_features-7.2.4-1.21-neoforge.jar")
 }
 
 processResources {

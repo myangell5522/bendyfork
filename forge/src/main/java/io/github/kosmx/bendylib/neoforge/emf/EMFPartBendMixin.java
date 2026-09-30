@@ -26,12 +26,10 @@ public abstract class EMFPartBendMixin {
             return;
         }
         MutableCuboid source = findSource(vanilla);
-        ModelPart self = (ModelPart) (Object) this;
         if (source == null) {
-            BendCopy.clearPart(self);
-        } else {
-            BendCopy.applyToPart(source, self);
+            return;
         }
+        BendCopy.applyToPart(source, (ModelPart) (Object) this);
     }
 
     private static MutableCuboid findSource(EMFModelPartVanilla part) {

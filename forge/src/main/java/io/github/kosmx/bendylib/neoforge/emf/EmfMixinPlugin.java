@@ -12,12 +12,8 @@ import java.util.Set;
  * EMF mixins target optional mod classes. Skip them when Entity Model Features is not installed.
  */
 public class EmfMixinPlugin implements IMixinConfigPlugin {
-    private boolean emfLoaded;
-
     @Override
     public void onLoad(String mixinPackage) {
-        LoadingModList mods = LoadingModList.get();
-        emfLoaded = mods != null && mods.getModFileById("entity_model_features") != null;
     }
 
     @Override
@@ -27,7 +23,8 @@ public class EmfMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return emfLoaded;
+        LoadingModList mods = LoadingModList.get();
+        return mods != null && mods.getModFileById("entity_model_features") != null;
     }
 
     @Override
