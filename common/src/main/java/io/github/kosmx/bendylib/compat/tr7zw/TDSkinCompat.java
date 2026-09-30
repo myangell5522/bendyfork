@@ -2,6 +2,7 @@ package io.github.kosmx.bendylib.compat.tr7zw;
 
 import dev.tr7zw.skinlayers.api.MeshTransformer;
 import dev.tr7zw.skinlayers.api.SkinLayersAPI;
+import io.github.kosmx.bendylib.BendCopy;
 import io.github.kosmx.bendylib.ModelPartAccessor;
 import io.github.kosmx.bendylib.MutableCuboid;
 import io.github.kosmx.bendylib.impl.BendableCuboid;
@@ -63,20 +64,9 @@ public class TDSkinCompat {
 
                     @Override
                     public void transform(ModelPart.Cube cuboid) {
-                        var sourceCuboid = sourceCuboidOptional.get();
-                        var mutator = sourceCuboid.getActiveMutator();
-                        if (!(cuboid instanceof MutableCuboid mutableCuboid) || mutator == null) {
-                            return;
+                        if (cuboid instanceof MutableCuboid mutableCuboid) {
+                            BendCopy.syncBend(sourceCuboidOptional.get(), mutableCuboid);
                         }
-                        if (!mutableCuboid.hasMutator(mutator.getA())) {
-                            mutableCuboid.registerMutator(mutator.getA(),
-                                    data -> new BendableCuboid.Builder().setDirection(getBendDirection()).build(data,
-                                            (sides, positions, minX, minY, minZ, maxX, maxY, maxZ, fixX, fixY, fixZ,
-                                             direction, basePlane, otherPlane, fullSize) ->
-                                                    new ModifiedBendableCuboid(sides, positions, minX, minY, minZ, maxX, maxY, maxZ, fixX, fixY, fixZ, direction,
-                                                            getBasePlane().scaled(16), getOtherSidePlane().scaled(16), bendHeight() * 16)));
-                        }
-                        mutableCuboid.copyStateFrom(sourceCuboid);
                     }
                 }
                 return new Bender(bendableSource);
@@ -109,13 +99,6 @@ public class TDSkinCompat {
             dest.set(Direction.NORTH.step());
         } else {
             dest.set(vecA);
-        }
-    }
-
-    private static class ModifiedBendableCuboid extends BendableCuboid {
-
-        protected ModifiedBendableCuboid(Quad[] sides, RememberingPos[] positions, float minX, float minY, float minZ, float maxX, float maxY, float maxZ, float fixX, float fixY, float fixZ, Direction direction, Plane basePlane, Plane otherPlane, float fullSize) {
-            super(sides, positions, minX, minY, minZ, maxX, maxY, maxZ, fixX, fixY, fixZ, direction, basePlane, otherPlane, fullSize);
         }
     }
 

@@ -24,6 +24,9 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+
+    // Entity Model Features API. Compile only: the mod is optional at runtime.
+    compileOnly files("${rootProject.projectDir}/libs/entity_model_features-3.3.9-1.21-neoforge.jar")
 }
 
 processResources {

@@ -11,12 +11,15 @@ displayName = "Bendy lib"
 authors = "KosmX"
 description = '''
 Bending model parts.
-NeoForge 1.21.1 fork of KosmX/bendy-lib with 3D Skin Layers compatibility.
+NeoForge 1.21.1 fork of KosmX/bendy-lib with 3D Skin Layers and Entity Model Features compatibility.
 '''
 #logoFile = ""
 
 [[mixins]]
 config = "bendylib.mixins.json"
+
+[[mixins]]
+config = "bendylib-emf.mixins.json"
 
 [[dependencies.bendylib]]
 modId = "minecraft"
@@ -31,5 +34,13 @@ modId = "skinlayers3d"
 type = "optional"
 mandatory = false
 versionRange = "[1.11,)"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[dependencies.bendylib]]
+modId = "entity_model_features"
+type = "optional"
+mandatory = false
+versionRange = "[3.3,)"
 ordering = "AFTER"
 side = "CLIENT"
