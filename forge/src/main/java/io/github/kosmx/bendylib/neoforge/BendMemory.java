@@ -38,6 +38,21 @@ public final class BendMemory {
     }
 
     /**
+     * Copies the remembered bend onto another part, such as a sleeve or jacket.
+     * The outer part keeps its own cube planes when the bend is applied at draw time.
+     */
+    public static void mirror(ModelPart from, ModelPart to) {
+        if (from == null || to == null || from == to) return;
+        State source = BY_PART.get(from);
+        if (source == null || !source.hasBend) return;
+        State dest = state(to);
+        dest.direction = source.direction;
+        dest.bendAxis = source.bendAxis;
+        dest.bendValue = source.bendValue;
+        dest.hasBend = true;
+    }
+
+    /**
      * Registers a bend on the part's current cubes and applies the remembered axis and angle.
      * Does not remove a mutator when the angle is zero.
      */
